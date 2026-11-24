@@ -48,8 +48,22 @@ const NON_WAREHOUSE = {
   Delivery:['Before handoff, what should you match to the order?','Confirm the parcel label','Guess from package size'],
   Hospitality:['How do you verify the workstation is ready?','Read the checklist','Assume it was completed']
 };
+const WALKTHROUGHS = {
+  warehouse: {
+    title:'Picking and packing',
+    en:['Check in and meet the shift lead.','Read the order and find the shelf code.','Scan the item. Match the code and quantity.','Pack it, apply the label, and hand it over for dispatch.'],
+    hi:['चेक इन करें और शिफ्ट के प्रभारी से मिलें।','ऑर्डर पढ़ें और शेल्फ का कोड ढूँढ़ें।','सामान स्कैन करें। कोड और संख्या मिलाएँ।','सामान पैक करें, लेबल लगाएँ और भेजने के लिए सौंप दें।'],
+    kn:['ಹಾಜರಾತಿ ದಾಖಲಿಸಿ ಮತ್ತು ಪಾಳಿಯ ಮೇಲ್ವಿಚಾರಕರನ್ನು ಭೇಟಿ ಮಾಡಿ.','ಆರ್ಡರ್ ಓದಿ ಮತ್ತು ಕಪಾಟಿನ ಕೋಡ್ ಹುಡುಕಿ.','ವಸ್ತುವನ್ನು ಸ್ಕ್ಯಾನ್ ಮಾಡಿ. ಕೋಡ್ ಮತ್ತು ಸಂಖ್ಯೆಯನ್ನು ಪರಿಶೀಲಿಸಿ.','ವಸ್ತುವನ್ನು ಪ್ಯಾಕ್ ಮಾಡಿ, ಲೇಬಲ್ ಅಂಟಿಸಿ ಮತ್ತು ಸಾಗಣೆಗೆ ಒಪ್ಪಿಸಿ.']
+  },
+  garment: {
+    title:'Garment quality check',
+    en:['Read the checklist and look at the approved sample.','Check the seams, size and label against the checklist.','Set aside garments that need a second check.','Record the count and hand off the batch.'],
+    hi:['जाँच सूची पढ़ें और स्वीकृत नमूना देखें।','सिलाई, नाप और लेबल को सूची से मिलाएँ।','जिन कपड़ों की दोबारा जाँच चाहिए, उन्हें अलग रखें।','गिनती दर्ज करें और बैच सौंप दें।'],
+    kn:['ಪರಿಶೀಲನಾ ಪಟ್ಟಿಯನ್ನು ಓದಿ ಮತ್ತು ಅನುಮೋದಿತ ಮಾದರಿಯನ್ನು ನೋಡಿ.','ಹೊಲಿಗೆ, ಗಾತ್ರ ಮತ್ತು ಲೇಬಲ್ ಅನ್ನು ಪಟ್ಟಿಯೊಂದಿಗೆ ಹೋಲಿಸಿ.','ಮತ್ತೆ ಪರಿಶೀಲಿಸಬೇಕಾದ ಉಡುಪುಗಳನ್ನು ಬೇರೆ ಇಡಿ.','ಎಣಿಕೆಯನ್ನು ದಾಖಲಿಸಿ ಮತ್ತು ಬ್ಯಾಚ್ ಅನ್ನು ಒಪ್ಪಿಸಿ.']
+  }
+};
 const state = {user:null,demo:false,jobs:[], saved:new Set(), applications:[], employer:null, filters:{q:'',where:'',shift:'',category:''},
-  savedOnly:false,job:null,practice:{variant:0,message:'',passed:false}, media:false, profile:null, scan:null, selectedScan:new Set(),
+  savedOnly:false,job:null,practice:{variant:0,message:'',passed:false}, profile:null, scan:null, selectedScan:new Set(),
   pending:null, loadError:'', view:'jobs'};
 let timeout;
 let renderTicket=0;
@@ -156,10 +170,61 @@ function jobsView() {
       (state.user?link('View applications','#applications'):state.demo?btn('Enter worker demo','demo','primary','data-role="worker"'):btn('Create an account','register','primary'))+'</div></section></aside></div>';
 }
 function fact(label,value) {return '<div class="fact"><span>'+e(label)+'</span><strong>'+e(value)+'</strong></div>';}
+function walkthroughView(key) {
+  const clip=WALKTHROUGHS[key];
+  return '<div class="walkthrough" data-clip="'+key+'"><div class="walkthrough-meta"><p class="muted small">'+e(clip.title)+' · 24 sec · illustrated example</p>'+
+    '<label>Voiceover <select data-voice aria-label="Voiceover language">'+opt('English','en','en')+opt('हिन्दी','hi')+opt('ಕನ್ನಡ','kn')+opt('Off','off')+'</select></label></div>'+
+    '<video class="walkthrough-video" aria-label="'+e(clip.title)+'" src="/assets/'+key+'-walkthrough.mp4" '+
+    'poster="/assets/'+key+'-walkthrough.jpg" playsinline controls preload="metadata">'+
+    '<track kind="captions" srclang="en" label="English" src="/assets/'+key+'-walkthrough.vtt"></video>'+
+    '<p class="muted small narration" data-narration aria-live="polite"></p><details><summary>Read English transcript</summary>'+
+    '<ol class="steps">'+clip.en.map(line=>'<li>'+e(line)+'</li>').join('')+'</ol></details></div>';
+}
+function connectWalkthrough() {
+  const container=main.querySelector('.walkthrough');
+  if(!container) return;
+  const video=container.querySelector('video'), select=container.querySelector('[data-voice]');
+  const status=container.querySelector('[data-narration]'), clip=WALKTHROUGHS[container.dataset.clip];
+  const speech=window.speechSynthesis;
+  const languages={en:'en-IN',hi:'hi-IN',kn:'kn-IN'};
+  let last=-1;
+  function narrate(restart=false) {
+    const key=select.value;
+    if(video.paused||video.ended||key==='off') return;
+    const index=Math.min(3,Math.floor(video.currentTime/6));
+    if(index===last&&!restart) return;
+    if(!speech){status.textContent='Voiceover is unavailable on this device. Read the English transcript below.';return;}
+    const voice=speech.getVoices().find(item=>item.lang.toLowerCase()===languages[key].toLowerCase())||
+      speech.getVoices().find(item=>item.lang.toLowerCase().startsWith(key+'-'));
+    if(!voice&&key!=='en'){status.textContent='This language needs a compatible voice on your device. English captions are available.';return;}
+    status.textContent='';
+    last=index;
+    const utterance=new SpeechSynthesisUtterance(clip[key][index]);
+    utterance.lang=languages[key];
+    if(voice) utterance.voice=voice;
+    utterance.onend=()=>{if(utterance===activeNarration)activeNarration=null;};
+    utterance.onerror=event=>{
+      if(utterance===activeNarration)activeNarration=null;
+      if(!['canceled','interrupted'].includes(event.error)) status.textContent='Could not play the voiceover. English captions and transcript are available.';
+    };
+    stopNarration();activeNarration=utterance;speech.speak(utterance);
+  }
+  select.addEventListener('change',()=>{stopNarration();last=-1;status.textContent='';narrate(true);});
+  video.addEventListener('play',()=>narrate(true));
+  video.addEventListener('timeupdate',()=>{if(!video.seeking)narrate();});
+  video.addEventListener('seeked',()=>narrate(true));
+  for(const event of ['pause','ended']) video.addEventListener(event,()=>stopNarration());
+}
+let activeNarration=null;
+function stopNarration() {
+  if(activeNarration){activeNarration=null;window.speechSynthesis?.cancel();}
+}
 function jobView() {
   const j=state.job;
   if(!j) return empty('Shift unavailable',state.loadError||'This listing may have been removed.',link('Browse shifts','#jobs'));
   const p=state.practice, existing=state.applications.find(a=>a.job===j.id);
+  const clip=j.name==='Garment quality checker'?'garment':
+    ['Warehouse picker','Packing associate'].includes(j.name)?'warehouse':null;
   let [question,right,wrong]=NON_WAREHOUSE[j.category]||['Pick the item with code '+(p.variant?'B24':'B17')+'.',p.variant?'B24':'B17',p.variant?'B42':'B71'];
   if(j.category!=='Warehouse'&&p.variant) question='A similar situation occurs on your next shift. '+question;
   const answers=p.variant?[right,wrong]:[wrong,right];
@@ -170,8 +235,7 @@ function jobView() {
       fact('Apply by',date(j.deadline))+fact('What to bring',j.bring||'Ask the recruiter when invited')+'</div><div class="tags">'+j.skills.map(x=>'<span class="tag">'+e(x)+'</span>').join('')+'</div></section>'+
     '<section class="panel" id="role-preview"><h2>See how the work goes</h2>'+
       (j.site_steps?'<p class="muted small">Steps provided by the employer for this worksite.</p>':'')+
-      (j.category==='Warehouse'?'<p class="muted small">Simulated warehouse example · 24 seconds</p><img class="media" src="/assets/'+(state.media?'warehouse.webp':'warehouse-poster.webp')+'" alt="Illustrated warehouse role walkthrough">'+
-        btn(state.media?'Stop preview':'Play preview','media','compact'):j.site_steps?'':'<p class="muted small">Example tasks for this role.</p>')+
+      (clip?walkthroughView(clip):j.site_steps?'':'<p class="muted small">Example tasks for this role.</p>')+
       '<ol class="steps">'+j.tasks.map(t=>'<li>'+e(t)+'</li>').join('')+'</ol></section>'+
     '<section class="panel" id="practice"><p class="kicker">Optional practice</p><h2>Try one task</h2><p>'+e(question)+'</p><div class="actions">'+answers.map((x,i)=>btn(x,'answer',i===0?'':'','data-text="'+e(x)+'"')).join('')+
       '</div><p role="status" class="'+(p.passed?'muted':'error')+'">'+e(p.message)+'</p></section></div>'+
@@ -245,6 +309,7 @@ function employerView() {
         empty('No hiring drives yet','Post the first shift.',btn('Post a shift','new-job','primary')))+'</section></div>';
 }
 function render() {
+  stopNarration();
   const page=state.view;
   renderHeader(page.startsWith('job/')?'jobs':page);
   if(state.loadError&&!page.startsWith('job/')) {
@@ -253,6 +318,7 @@ function render() {
   }
   const views={jobs:jobsView,applications:applicationView,profile:profileView,learn:learnView,employer:employerView};
   main.innerHTML=page.startsWith('job/')?jobView():(views[page]||jobsView)();
+  if(page.startsWith('job/')) connectWalkthrough();
 }
 function resetProfile() {
   state.profile = {name:state.user?.name||'',locality:'',language:'',education:'',experience:'',roles:[],skills:[],shifts:[],
@@ -267,7 +333,7 @@ async function refresh() {
     if(current.startsWith('job/')) {
       const jid=id(current.split('/')[1]);
       if(!Number.isInteger(jid)||jid<1) throw new Error('Job not found.');
-      if(state.job?.id!==jid) {state.practice={variant:0,message:'',passed:false};state.media=false;}
+      if(state.job?.id!==jid) state.practice={variant:0,message:'',passed:false};
       state.job=null;
       const next=await api('/jobs/'+jid);
       if(ticket!==renderTicket) return;
@@ -432,7 +498,6 @@ const actions = {
   'saved-filter':()=>{if(state.user?.role!=='worker'){auth();return;}state.savedOnly=!state.savedOnly;render();},
   'save':b=>toggleSave(id(b.dataset.id)),
   'apply':()=>openApply(),
-  'media':()=>{state.media=!state.media;render();document.querySelector('[data-action=media]')?.focus({preventScroll:true});},
   'share':async()=>{const text=location.href;
     try {await navigator.clipboard.writeText(text);notify('Shift link copied.');}
     catch {showModal('Share this shift','<label class="form">Copy this link<input readonly value="'+e(text)+'" aria-label="Shareable shift link"></label>');}},

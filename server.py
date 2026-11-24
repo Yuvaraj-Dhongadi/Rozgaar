@@ -271,12 +271,14 @@ def application_dict(row):
 
 
 class Handler(BaseHTTPRequestHandler):
-    def send_data(self,code,content,mime="application/json; charset=utf-8",cookie=None):
+    def send_data(self,code,content,mime="application/json; charset=utf-8",cookie=None,headers=None):
         self.send_response(code)
         self.send_header("Content-Type",mime)
         self.send_header("Content-Length",str(len(content)))
         self.send_header("X-Content-Type-Options","nosniff")
         self.send_header("Cache-Control","no-store")
+        for key, value in (headers or {}).items():
+            self.send_header(key,value)
         if cookie:
             self.send_header("Set-Cookie",cookie)
         self.end_headers()
@@ -530,13 +532,31 @@ class Handler(BaseHTTPRequestHandler):
                 raise ApiError(405,"Method not allowed.")
             if path in ("/","/index.html","/jobs","/learn","/applications","/profile","/employer"):
                 file=ROOT/"index.html"
-            elif path in ("/app.js","/styles.css","/assets/logo.webp","/assets/warehouse.webp","/assets/warehouse-poster.webp","/assets/resume-sample.png"):
+            elif path in ("/app.js","/styles.css","/assets/logo.webp","/assets/warehouse.webp","/assets/warehouse-poster.webp","/assets/resume-sample.png") or re.fullmatch(r"/assets/(warehouse|garment)-walkthrough\.(mp4|jpg|vtt)",path):
                 file=ROOT/path.lstrip("/")
             else:
                 raise ApiError(404,"Page not found.")
             if not file.is_file():
                 raise ApiError(404,"File not found.")
             mime=mimetypes.guess_type(file.name)[0] or "application/octet-stream"
+            if file.suffix==".vtt":
+                mime="text/vtt; charset=utf-8"
+            if file.suffix==".mp4":
+                content=file.read_bytes()
+                length=len(content)
+                requested=self.headers.get("Range")
+                headers={"Accept-Ranges":"bytes"}
+                if requested:
+                    match=re.fullmatch(r"bytes=(\d*)-(\d*)",requested)
+                    if match and (match[1] or match[2]):
+                        start=int(match[1]) if match[1] else max(0,length-int(match[2]))
+                        end=min(int(match[2]),length-1) if match[1] and match[2] else length-1
+                        if start<=end:
+                            headers["Content-Range"]=f"bytes {start}-{end}/{length}"
+                            return self.send_data(206,content[start:end+1],mime,headers=headers)
+                    headers["Content-Range"]=f"bytes */{length}"
+                    return self.send_data(416,b"",mime,headers=headers)
+                return self.send_data(200,content,mime,headers=headers)
             return self.send_data(200,file.read_bytes(),mime+("; charset=utf-8" if file.suffix in (".html",".js",".css") else ""))
         except ApiError as error:
             self.result({"error":error.message},error.code)
