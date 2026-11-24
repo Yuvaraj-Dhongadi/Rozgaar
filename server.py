@@ -532,7 +532,7 @@ class Handler(BaseHTTPRequestHandler):
                 raise ApiError(405,"Method not allowed.")
             if path in ("/","/index.html","/jobs","/learn","/applications","/profile","/employer"):
                 file=ROOT/"index.html"
-            elif path in ("/app.js","/styles.css","/assets/logo.webp","/assets/warehouse.webp","/assets/warehouse-poster.webp","/assets/resume-sample.png") or re.fullmatch(r"/assets/(warehouse|garment)-walkthrough\.(mp4|jpg|vtt)",path):
+            elif path in ("/app.js","/styles.css","/assets/logo.webp","/assets/warehouse.webp","/assets/warehouse-poster.webp","/assets/resume-sample.png") or re.fullmatch(r"/assets/(warehouse|garment)-walkthrough\.(mp4|jpg|vtt)",path) or re.fullmatch(r"/assets/lessons/(?:(?:pack-size|product-label|garment)-(?:en|kn|hi)\.mp4|(?:pack-size|product-label)\.jpg|sizes\.json)",path):
                 file=ROOT/path.lstrip("/")
             else:
                 raise ApiError(404,"Page not found.")

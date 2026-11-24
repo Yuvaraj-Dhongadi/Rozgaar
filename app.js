@@ -49,14 +49,20 @@ const NON_WAREHOUSE = {
   Hospitality:['How do you verify the workstation is ready?','Read the checklist','Assume it was completed']
 };
 const WALKTHROUGHS = {
-  warehouse: {
-    title:'Picking and packing',
-    en:['Check in and meet the shift lead.','Read the order and find the shelf code.','Scan the item. Match the code and quantity.','Pack it, apply the label, and hand it over for dispatch.'],
-    hi:['चेक इन करें और शिफ्ट के प्रभारी से मिलें।','ऑर्डर पढ़ें और शेल्फ का कोड ढूँढ़ें।','सामान स्कैन करें। कोड और संख्या मिलाएँ।','सामान पैक करें, लेबल लगाएँ और भेजने के लिए सौंप दें।'],
-    kn:['ಹಾಜರಾತಿ ದಾಖಲಿಸಿ ಮತ್ತು ಪಾಳಿಯ ಮೇಲ್ವಿಚಾರಕರನ್ನು ಭೇಟಿ ಮಾಡಿ.','ಆರ್ಡರ್ ಓದಿ ಮತ್ತು ಕಪಾಟಿನ ಕೋಡ್ ಹುಡುಕಿ.','ವಸ್ತುವನ್ನು ಸ್ಕ್ಯಾನ್ ಮಾಡಿ. ಕೋಡ್ ಮತ್ತು ಸಂಖ್ಯೆಯನ್ನು ಪರಿಶೀಲಿಸಿ.','ವಸ್ತುವನ್ನು ಪ್ಯಾಕ್ ಮಾಡಿ, ಲೇಬಲ್ ಅಂಟಿಸಿ ಮತ್ತು ಸಾಗಣೆಗೆ ಒಪ್ಪಿಸಿ.']
+'pack-size': {
+    title:'Pick the right pack size', poster:'lessons/pack-size.jpg',
+    en:['Read the order. Pick two packs of oats, five hundred grams each.','One one-kilogram pack weighs the same, but the order asks for two packs.','Pick two separate five hundred gram packs.'],
+    hi:['ऑर्डर पढ़ें। पाँच सौ ग्राम वाले ओट्स के दो पैकेट चाहिए।','एक किलो के एक पैकेट का कुल वजन उतना ही है, लेकिन ऑर्डर में दो पैकेट चाहिए।','पाँच सौ ग्राम के दो अलग पैकेट चुनें।'],
+    kn:['ಆರ್ಡರ್ ಓದಿ. ತಲಾ ಐನೂರು ಗ್ರಾಂ ತೂಕದ ಎರಡು ಓಟ್ಸ್ ಪ್ಯಾಕ್‌ಗಳನ್ನು ತೆಗೆದುಕೊಳ್ಳಿ.','ಒಂದು ಕಿಲೋ ಪ್ಯಾಕ್‌ನ ಒಟ್ಟು ತೂಕ ಒಂದೇ. ಆದರೆ ಆರ್ಡರ್‌ಗೆ ಎರಡು ಪ್ಯಾಕ್‌ಗಳು ಬೇಕು.','ಐನೂರು ಗ್ರಾಂನ ಎರಡು ಪ್ರತ್ಯೇಕ ಪ್ಯಾಕ್‌ಗಳನ್ನು ತೆಗೆದುಕೊಳ್ಳಿ.']
+  },
+  'product-label': {
+    title:'Match the product name', poster:'lessons/product-label.jpg',
+    en:['Read the product name on the order. This order asks for toor dal.','Look for toor dal on the pack. Leave the chana dal on the shelf.','Then check the pack size and quantity.'],
+    hi:['ऑर्डर में लिखा सामान का नाम पढ़ें। इस ऑर्डर में अरहर दाल चाहिए।','पैकेट पर अरहर दाल का नाम देखें। चना दाल का पैकेट वहीं छोड़ दें।','फिर पैकेट का वजन और संख्या जाँचें।'],
+    kn:['ಆರ್ಡರ್‌ನಲ್ಲಿರುವ ಪದಾರ್ಥದ ಹೆಸರನ್ನು ಓದಿ. ಈ ಆರ್ಡರ್‌ಗೆ ತೊಗರಿ ಬೇಳೆ ಬೇಕು.','ಪ್ಯಾಕ್ ಮೇಲೆ ತೊಗರಿ ಬೇಳೆ ಎಂದು ಬರೆದಿದೆಯೇ ನೋಡಿ. ಕಡಲೆ ಬೇಳೆಯ ಪ್ಯಾಕ್ ಅನ್ನು ತೆಗೆದುಕೊಳ್ಳಬೇಡಿ.','ನಂತರ ಪ್ಯಾಕ್‌ನ ತೂಕ ಮತ್ತು ಎಣಿಕೆಯನ್ನು ಪರಿಶೀಲಿಸಿ.']
   },
   garment: {
-    title:'Garment quality check',
+    title:'Garment quality check', poster:'garment-walkthrough.jpg',
     en:['Read the checklist and look at the approved sample.','Check the seams, size and label against the checklist.','Set aside garments that need a second check.','Record the count and hand off the batch.'],
     hi:['जाँच सूची पढ़ें और स्वीकृत नमूना देखें।','सिलाई, नाप और लेबल को सूची से मिलाएँ।','जिन कपड़ों की दोबारा जाँच चाहिए, उन्हें अलग रखें।','गिनती दर्ज करें और बैच सौंप दें।'],
     kn:['ಪರಿಶೀಲನಾ ಪಟ್ಟಿಯನ್ನು ಓದಿ ಮತ್ತು ಅನುಮೋದಿತ ಮಾದರಿಯನ್ನು ನೋಡಿ.','ಹೊಲಿಗೆ, ಗಾತ್ರ ಮತ್ತು ಲೇಬಲ್ ಅನ್ನು ಪಟ್ಟಿಯೊಂದಿಗೆ ಹೋಲಿಸಿ.','ಮತ್ತೆ ಪರಿಶೀಲಿಸಬೇಕಾದ ಉಡುಪುಗಳನ್ನು ಬೇರೆ ಇಡಿ.','ಎಣಿಕೆಯನ್ನು ದಾಖಲಿಸಿ ಮತ್ತು ಬ್ಯಾಚ್ ಅನ್ನು ಒಪ್ಪಿಸಿ.']
@@ -170,61 +176,59 @@ function jobsView() {
       (state.user?link('View applications','#applications'):state.demo?btn('Enter worker demo','demo','primary','data-role="worker"'):btn('Create an account','register','primary'))+'</div></section></aside></div>';
 }
 function fact(label,value) {return '<div class="fact"><span>'+e(label)+'</span><strong>'+e(value)+'</strong></div>';}
+const walkthroughLanguages={en:'English',hi:'हिन्दी (Hindi)',kn:'ಕನ್ನಡ (Kannada)'};
+const clipUrl=(key,lang)=>'/assets/lessons/'+key+'-'+lang+'.mp4';
+const transcript=(clip,lang)=>clip[lang].map(line=>'<li>'+e(line)+'</li>').join('');
+const preferredLanguage=()=> {
+  const value=localStorage.getItem('rozgaar-lesson-language');
+  return Object.hasOwn(walkthroughLanguages,value)?value:'en';
+};
+let lessonSizes;
 function walkthroughView(key) {
-  const clip=WALKTHROUGHS[key];
-  return '<div class="walkthrough" data-clip="'+key+'"><div class="walkthrough-meta"><p class="muted small">'+e(clip.title)+' · 24 sec · illustrated example</p>'+
-    '<label>Voiceover <select data-voice aria-label="Voiceover language">'+opt('English','en','en')+opt('हिन्दी','hi')+opt('ಕನ್ನಡ','kn')+opt('Off','off')+'</select></label></div>'+
-    '<video class="walkthrough-video" aria-label="'+e(clip.title)+'" src="/assets/'+key+'-walkthrough.mp4" '+
-    'poster="/assets/'+key+'-walkthrough.jpg" playsinline controls preload="metadata">'+
-    '<track kind="captions" srclang="en" label="English" src="/assets/'+key+'-walkthrough.vtt"></video>'+
-    '<p class="muted small narration" data-narration aria-live="polite"></p><details><summary>Read English transcript</summary>'+
-    '<ol class="steps">'+clip.en.map(line=>'<li>'+e(line)+'</li>').join('')+'</ol></details></div>';
+  const clip=WALKTHROUGHS[key], lang=preferredLanguage(), url=clipUrl(key,lang);
+  return '<div class="walkthrough" data-clip="'+key+'">'+
+    '<div class="walkthrough-meta"><h3>'+e(clip.title)+'</h3><label>Audio language <select data-voice aria-label="Audio language">'+
+    Object.entries(walkthroughLanguages).map(([code,label])=>opt(label,code,lang)).join('')+'</select></label></div>'+
+    '<video class="walkthrough-video" aria-label="'+e(clip.title)+'" src="'+url+'" '+
+    'poster="/assets/'+clip.poster+'" playsinline controls preload="none">'+
+    (key==='garment'?'<track kind="captions" srclang="en" label="English" src="/assets/garment-walkthrough.vtt">':'')+'</video>'+
+    '<div class="walkthrough-meta lesson-download"><a class="linkbtn compact" download href="'+url+'">Download MP4</a>'+
+    '<span class="muted small">Narration by <a href="https://elevenlabs.io/">ElevenLabs</a></span></div>'+
+    '<details><summary>Read transcript</summary><ol class="steps" data-transcript>'+transcript(clip,lang)+'</ol></details></div>';
 }
 function connectWalkthrough() {
-  const container=main.querySelector('.walkthrough');
-  if(!container) return;
-  const video=container.querySelector('video'), select=container.querySelector('[data-voice]');
-  const status=container.querySelector('[data-narration]'), clip=WALKTHROUGHS[container.dataset.clip];
-  const speech=window.speechSynthesis;
-  const languages={en:'en-IN',hi:'hi-IN',kn:'kn-IN'};
-  let last=-1;
-  function narrate(restart=false) {
-    const key=select.value;
-    if(video.paused||video.ended||key==='off') return;
-    const index=Math.min(3,Math.floor(video.currentTime/6));
-    if(index===last&&!restart) return;
-    if(!speech){status.textContent='Voiceover is unavailable on this device. Read the English transcript below.';return;}
-    const voice=speech.getVoices().find(item=>item.lang.toLowerCase()===languages[key].toLowerCase())||
-      speech.getVoices().find(item=>item.lang.toLowerCase().startsWith(key+'-'));
-    if(!voice&&key!=='en'){status.textContent='This language needs a compatible voice on your device. English captions are available.';return;}
-    status.textContent='';
-    last=index;
-    const utterance=new SpeechSynthesisUtterance(clip[key][index]);
-    utterance.lang=languages[key];
-    if(voice) utterance.voice=voice;
-    utterance.onend=()=>{if(utterance===activeNarration)activeNarration=null;};
-    utterance.onerror=event=>{
-      if(utterance===activeNarration)activeNarration=null;
-      if(!['canceled','interrupted'].includes(event.error)) status.textContent='Could not play the voiceover. English captions and transcript are available.';
+  const players=main.querySelectorAll('.walkthrough');
+  if(!players.length) return;
+  lessonSizes ??= fetch('/assets/lessons/sizes.json').then(response=>response.ok?response.json():{}).catch(()=>({}));
+  for(const container of players) {
+    const key=container.dataset.clip, clip=WALKTHROUGHS[key];
+    const video=container.querySelector('video'), select=container.querySelector('[data-voice]');
+    const download=container.querySelector('[download]');
+    const updateSize=async()=>{
+      const bytes=(await lessonSizes)[key]?.[select.value];
+      download.textContent=bytes?'Download MP4 · '+Math.ceil(bytes/1000)+' kB':'Download MP4';
     };
-    stopNarration();activeNarration=utterance;speech.speak(utterance);
+    updateSize();
+    video.addEventListener('play',()=>{
+      for(const other of players) if(other!==container) other.querySelector('video').pause();
+    });
+    select.addEventListener('change',()=>{
+      const lang=select.value, url=clipUrl(key,lang);
+      video.pause();
+      video.src=url;
+      download.href=url;
+      container.querySelector('[data-transcript]').innerHTML=transcript(clip,lang);
+      localStorage.setItem('rozgaar-lesson-language',lang);
+      updateSize();
+    });
   }
-  select.addEventListener('change',()=>{stopNarration();last=-1;status.textContent='';narrate(true);});
-  video.addEventListener('play',()=>narrate(true));
-  video.addEventListener('timeupdate',()=>{if(!video.seeking)narrate();});
-  video.addEventListener('seeked',()=>narrate(true));
-  for(const event of ['pause','ended']) video.addEventListener(event,()=>stopNarration());
-}
-let activeNarration=null;
-function stopNarration() {
-  if(activeNarration){activeNarration=null;window.speechSynthesis?.cancel();}
 }
 function jobView() {
   const j=state.job;
   if(!j) return empty('Shift unavailable',state.loadError||'This listing may have been removed.',link('Browse shifts','#jobs'));
   const p=state.practice, existing=state.applications.find(a=>a.job===j.id);
   const clip=j.name==='Garment quality checker'?'garment':
-    ['Warehouse picker','Packing associate'].includes(j.name)?'warehouse':null;
+    j.name==='Warehouse picker'?'product-label':j.name==='Packing associate'?'pack-size':null;
   let [question,right,wrong]=NON_WAREHOUSE[j.category]||['Pick the item with code '+(p.variant?'B24':'B17')+'.',p.variant?'B24':'B17',p.variant?'B42':'B71'];
   if(j.category!=='Warehouse'&&p.variant) question='A similar situation occurs on your next shift. '+question;
   const answers=p.variant?[right,wrong]:[wrong,right];
@@ -286,7 +290,7 @@ function profileView() {
     '</aside></div>';
 }
 function learnView() {
-  return '<div class="page-head"><h1>Learn a task</h1><p class="muted">Free, short lessons for the work you’re considering.</p></div><div class="lesson-grid">'+LESSONS.map((l,i)=>
+  return '<div class="page-head"><h1>Learn a task</h1><p class="muted">Free, short lessons for the work you’re considering.</p></div><div class="lesson-grid lesson-videos">'+Object.keys(WALKTHROUGHS).map(key=>'<section class="panel">'+walkthroughView(key)+'</section>').join('')+'</div><div class="lesson-grid">'+LESSONS.map((l,i)=>
     '<article class="panel"><div class="row"><p class="kicker">'+e(l.label)+'</p>'+badge(l.duration,'gray')+'</div><h3>'+e(l.title)+'</h3><p class="muted small">'+e(l.steps[0])+'</p><div class="actions">'+btn('Open lesson','lesson','primary','data-id="'+i+'"')+'</div></article>').join('')+'</div>';
 }
 function employerView() {
@@ -309,7 +313,6 @@ function employerView() {
         empty('No hiring drives yet','Post the first shift.',btn('Post a shift','new-job','primary')))+'</section></div>';
 }
 function render() {
-  stopNarration();
   const page=state.view;
   renderHeader(page.startsWith('job/')?'jobs':page);
   if(state.loadError&&!page.startsWith('job/')) {
@@ -318,7 +321,7 @@ function render() {
   }
   const views={jobs:jobsView,applications:applicationView,profile:profileView,learn:learnView,employer:employerView};
   main.innerHTML=page.startsWith('job/')?jobView():(views[page]||jobsView)();
-  if(page.startsWith('job/')) connectWalkthrough();
+  connectWalkthrough();
 }
 function resetProfile() {
   state.profile = {name:state.user?.name||'',locality:'',language:'',education:'',experience:'',roles:[],skills:[],shifts:[],

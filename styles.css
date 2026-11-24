@@ -20,3 +20,4 @@ dialog{width:min(550px,100% - 26px);max-height:calc(100dvh - 34px);overflow:auto
 .walkthrough details { margin-top: 10px; }
 .walkthrough summary { color: var(--blue); cursor: pointer; font-size: 14px; font-weight: 750; }
 .walkthrough .narration:empty { display: none; }
+.lesson-videos{margin-bottom:18px}.lesson-videos .walkthrough{margin-top:0}.walkthrough-meta h3{margin:0}.walkthrough-meta select{border:1px solid var(--line);border-radius:9px;background:var(--page);color:var(--ink)}.lesson-download{margin-bottom:8px}.lesson-download .linkbtn{min-height:37px}.walkthrough-video{background:#091539}

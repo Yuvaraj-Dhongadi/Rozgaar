@@ -13,7 +13,7 @@ Open http://127.0.0.1:8000. Use Python 3.10 or later. The app creates its databa
 ## Demo route
 
 1. Choose **Enter worker demo** to load Anu Rao's account with saved jobs and sample trial statuses. Use the sign-in form to create a separate worker account.
-2. Open Warehouse picker, Packing associate, or Garment quality checker. Play the 24-second illustrated role video in the listing, then practice a task and apply. The two videos have English captions and transcripts. The English, Hindi and Kannada narration choices use the voices available on your device.
+2. Open Warehouse picker, Packing associate or Garment quality checker. Choose English, Hindi or Kannada narration. Use **Download MP4** to keep that clip for offline playback in the phone’s media player. The clips use pre-generated ElevenLabs audio, and Learn also shows the transcript.
 3. Open **Profile**, then **Scan sample** or upload a PDF, PNG or JPEG. Review the extracted text and save the skills you want to share.
 4. Sign out. Choose **Employer → Try employer demo** to open the hiring workspace. Review the application and send a phone, in-person or video trial invitation.
 5. Re-enter the worker demo and confirm the invitation in **Applications**. The employer can then mark attendance.
