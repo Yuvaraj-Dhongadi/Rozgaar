@@ -1,0 +1,6 @@
+.data
+.git
+__pycache__
+.env*
+*.zip
+.DS_Store
